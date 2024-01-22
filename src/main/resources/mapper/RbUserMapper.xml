@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.rbapi.mapper.RbUserMapper">
+
+    <select id="detail" parameterType="hashMap" resultType="org.example.rbapi.dto.RbUserDto$RbUserSelectDto">
+        SELECT RbUser.id
+             ,RbUser.uid
+             ,RbUser.nick
+             ,RbUser.sfrom
+             ,RbUser.name
+             ,RbUser.process
+             ,RbUser.phone
+             ,RbUser.mpic
+             ,RbUser.deleted
+             ,RbUser.created_at
+             ,RbUser.modified_at
+        FROM RbUser
+        WHERE RbUser.id = #{id}
+    </select>
+    <select id="list" parameterType="org.example.rbapi.dto.RbUserDto$RbUserListDto" resultType="org.example.rbapi.dto.RbUserDto$RbUserSelectDto">
+        SELECT RbUser.id
+        ,RbUser.uid
+        ,RbUser.nick
+        ,RbUser.sfrom
+        ,RbUser.name
+        ,RbUser.process
+        ,RbUser.phone
+        ,RbUser.mpic
+        ,RbUser.deleted
+        ,RbUser.created_at
+        ,RbUser.modified_at
+        FROM RbUser
+        WHERE RbUser.id is not null
+        <if test = "uid != null and uid !=''">AND RbUser.uid LIKE CONCAT('%', #{uid}, '%')</if>
+        <if test = "nick != null and nick !=''">AND RbUser.nick LIKE CONCAT('%', #{nick}, '%')</if>
+        <if test = "name != null and name !=''">AND RbUser.name LIKE CONCAT('%', #{name}, '%')</if>
+        <if test = "phone != null and phone !=''">AND RbUser.phone LIKE CONCAT('%', #{phone})</if>
+        <if test = "process != null and process !=''">AND RbUser.process = #{process}</if>
+        <if test = "deleted != null and deleted !=''">AND RbUser.deleted = #{deleted}</if>
+    </select>
+
+    <select id="moreList" parameterType="org.example.rbapi.dto.RbUserDto$RbUserMoreListDto" resultType="org.example.rbapi.dto.RbUserDto$RbUserSelectDto">
+        SELECT RbUser.id
+        ,,RbUser.uid
+        ,RbUser.nick
+        ,RbUser.sfrom
+        ,RbUser.name
+        ,RbUser.process
+        ,RbUser.phone
+        ,RbUser.mpic
+        ,RbUser.deleted
+        ,RbUser.created_at
+        ,RbUser.modified_at
+        FROM RbUser
+        WHERE RbUser.id is not null
+        <if test = "uid != null and uid !=''">AND RbUser.uid LIKE CONCAT('%', #{uid}, '%')</if>
+        <if test = "nick != null and nick !=''">AND RbUser.nick LIKE CONCAT('%', #{nick}, '%')</if>
+        <if test = "name != null and name !=''">AND RbUser.name LIKE CONCAT('%', #{name}, '%')</if>
+        <if test = "phone != null and phone !=''">AND RbUser.phone LIKE CONCAT('%', #{phone})</if>
+        <if test = "process != null and process !=''">AND RbUser.process = #{process}</if>
+        <if test = "deleted != null and deleted !=''">AND RbUser.deleted = #{deleted}</if>
+        <if test = "cdatetime != null and cdatetime !=''">
+            <if test = "cway =='before'">AND STR_TO_DATE(#{cdatetime}, '%Y-%m-%d %H:%i:%s.%f') > RbUser.created_at ORDER BY RbUser.created_at DESC</if>
+            <if test = "cway =='recent'">AND RbUser.created_at > STR_TO_DATE(#{cdatetime}, '%Y-%m-%d %H:%i:%s.%f') ORDER BY RbUser.created_at ASC</if>
+        </if>
+        LIMIT 0, #{permore}
+    </select>
+
+    <select id="pagedList" parameterType="org.example.rbapi.dto.RbUserDto$RbUserPagedListDto" resultType="org.example.rbapi.dto.RbUserDto$RbUserSelectDto">
+        SELECT RbUser.id
+        ,RbUser.uid
+        ,RbUser.nick
+        ,RbUser.sfrom
+        ,RbUser.name
+        ,RbUser.process
+        ,RbUser.phone
+        ,RbUser.mpic
+        ,RbUser.deleted
+        ,RbUser.created_at
+        ,RbUser.modified_at
+        FROM RbUser
+        WHERE RbUser.id is not null
+        <if test = "uid != null and uid !=''">AND RbUser.uid LIKE CONCAT('%', #{uid}, '%')</if>
+        <if test = "nick != null and nick !=''">AND RbUser.nick LIKE CONCAT('%', #{nick}, '%')</if>
+        <if test = "name != null and name !=''">AND RbUser.name LIKE CONCAT('%', #{name}, '%')</if>
+        <if test = "phone != null and phone !=''">AND RbUser.phone LIKE CONCAT('%', #{phone})</if>
+        <if test = "process != null and process !=''">AND RbUser.process = #{process}</if>
+        <if test = "deleted != null and deleted !=''">AND RbUser.deleted = #{deleted}</if>
+        <if test = "orderby =='created_at'">ORDER BY RbUser.created_at </if>
+        <if test = "orderby =='title'">ORDER BY RbUser.title </if>
+        <if test = "orderway =='asc'">ASC</if>
+        <if test = "orderway =='desc'">DESC</if>
+        LIMIT #{callpage}, #{perpage}
+    </select>
+
+    <select id="pagedListCount" parameterType="org.example.rbapi.dto.RbUserDto$RbUserPagedListDto" resultType="Integer">
+        SELECT count(RbUser.id) as listsize
+        FROM RbUser
+        WHERE RbUser.id is not null
+        <if test = "uid != null and uid !=''">AND RbUser.uid LIKE CONCAT('%', #{uid}, '%')</if>
+        <if test = "nick != null and nick !=''">AND RbUser.nick LIKE CONCAT('%', #{nick}, '%')</if>
+        <if test = "name != null and name !=''">AND RbUser.name LIKE CONCAT('%', #{name}, '%')</if>
+        <if test = "phone != null and phone !=''">AND RbUser.phone LIKE CONCAT('%', #{phone})</if>
+        <if test = "process != null and process !=''">AND RbUser.process = #{process}</if>
+        <if test = "deleted != null and deleted !=''">AND RbUser.deleted = #{deleted}</if>
+    </select>
+
+</mapper>
